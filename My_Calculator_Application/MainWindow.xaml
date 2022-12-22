@@ -1,0 +1,132 @@
+﻿<Window x:Class="My_Calculator_Application.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:My_Calculator_Application" d:DataContext="{d:DesignInstance Type=local:mainViewModel}"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="552" Width="600">
+
+
+
+    <Window.Resources>
+        <local:mainViewModel x:Key="MainViewModel"/>
+
+        <Style x:Key="Button" TargetType="Button">
+            <Setter Property="FontSize" Value="35"/>
+            <Setter Property="Margin" Value="3"/>
+            <Setter Property="Command" Value="{Binding ButtonClickCommand}"/>
+            <Setter Property="CommandParameter" Value="{Binding RelativeSource={RelativeSource Self},Path=Content}"/>
+        </Style>
+
+        <Style x:Key="OperationButton" TargetType="Button" BasedOn="{StaticResource Button}">
+            <Setter Property="Background" Value="#BBB"/>
+        </Style>
+
+        <Style x:Key="TextBox" TargetType="TextBox">
+            <Setter Property="Margin" Value="10,0,10,0"/>
+            <Setter Property="TextAlignment" Value="Right"/>
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="BorderThickness" Value="3"/>
+        </Style>
+
+        <Style x:Key="Input" TargetType="TextBox" BasedOn="{StaticResource TextBox}">
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+
+
+        <Style x:Key="Output" TargetType="TextBox" BasedOn="{StaticResource TextBox}">
+            <Setter Property="FontSize" Value="30"/>
+            <Setter Property="Foreground" Value="{Binding ColorOutputTextBox}"/>
+            <Setter Property="IsReadOnly" Value="True"/>
+        </Style>
+
+        <Style x:Key="Memory" TargetType="Button">
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="Background" Value="#FFF"/>
+        </Style>
+
+    </Window.Resources>
+
+
+    <Grid Background="#DDD" DataContext="{StaticResource MainViewModel}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="1.2*"/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Button Content="C" Grid.Column="0" Grid.Row="2" Style="{StaticResource OperationButton}"/>
+            <Button Content="=" Grid.Column="2" Grid.Row="6" Grid.ColumnSpan="2" Background="GreenYellow" Style="{StaticResource OperationButton}"/>
+
+            <Button Content="(" Grid.Column="1" Grid.Row="2" Style="{StaticResource OperationButton}"/>
+            <Button Content=")" Grid.Column="2" Grid.Row="2" Style="{StaticResource OperationButton}"/>
+            <Button Content="/" Grid.Column="3" Grid.Row="2" Style="{StaticResource OperationButton}"/>
+            <Button Content="*" Grid.Column="3" Grid.Row="3" Style="{StaticResource OperationButton}"/>
+            <Button Content="-" Grid.Column="3" Grid.Row="4" Style="{StaticResource OperationButton}"/>
+            <Button Content="+" Grid.Column="3" Grid.Row="5" Style="{StaticResource OperationButton}"/>
+
+            <Button Content="9" Grid.Column="2" Grid.Row="3" Style="{StaticResource Button}"/>
+            <Button Content="8" Grid.Column="1" Grid.Row="3" Style="{StaticResource Button}"/>
+            <Button Content="7" Grid.Column="0" Grid.Row="3" Style="{StaticResource Button}"/>
+            <Button Content="6" Grid.Column="2" Grid.Row="4" Style="{StaticResource Button}"/>
+            <Button Content="5" Grid.Column="1" Grid.Row="4" Style="{StaticResource Button}"/>
+            <Button Content="4" Grid.Column="0" Grid.Row="4" Style="{StaticResource Button}"/>
+            <Button Content="3" Grid.Column="2" Grid.Row="5" Style="{StaticResource Button}"/>
+            <Button Content="2" Grid.Column="1" Grid.Row="5" Style="{StaticResource Button}"/>
+            <Button Content="1" Grid.Column="0" Grid.Row="5" Style="{StaticResource Button}"/>
+            <Button Content="0" Grid.Column="1" Grid.Row="6" Style="{StaticResource Button}"/>
+            <Button Content="." Grid.Column="0" Grid.Row="6" Style="{StaticResource Button}"/>
+
+            <TextBox Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="4" Style="{StaticResource Input}" Text="{Binding InputDisplay}"/>
+            <TextBox Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="4" Style="{StaticResource Output}" Text="{Binding OutputDisplay}"/>
+        </Grid>
+
+        <ScrollViewer Grid.Column="1" Grid.Row="0" Grid.RowSpan="7" Margin="10">
+            <ItemsControl ItemsSource="{Binding ListMemory}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="8*"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+
+                            <Button Grid.Column="0" Grid.Row="0" Style="{StaticResource Memory}"
+                                    Content="{Binding Example}"
+                                    Command="{Binding GetExamCommand, Source={StaticResource MainViewModel}}"
+                                    CommandParameter="{Binding }"/>
+                            <Button Grid.Column="1" Grid.Row="0" Style="{StaticResource Memory}"
+                                    Content="{Binding Result}"
+                                    Command="{Binding GetResCommand, Source={StaticResource MainViewModel}}"
+                                    CommandParameter="{Binding }"/>
+                            <Button Grid.Column="2" Grid.Row="0" Style="{StaticResource Memory}"
+                                    Content="-"
+                                    Command="{Binding RemoveElementCommand, Source={StaticResource MainViewModel}}"
+                                    CommandParameter="{Binding }"/>
+
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </Grid>
+</Window>
